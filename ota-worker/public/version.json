@@ -1,8 +1,8 @@
 {
-  "versionCode": 17,
-  "versionName": "2.6",
+  "versionCode": 18,
+  "versionName": "2.7",
   "downloadUrl": "https://wa-cevirmen-ota.mor-media-drive-sync-bridge.workers.dev/WA-Cevirmen-Asistan.apk",
-  "notes": "WhatsApp Ceviri v2.6: WhatsApp icindeki baslatici ikonu %35 kucultuldu (28dp)",
-  "updatedAt": "2026-11-27T11:39:05.984Z",
-  "sizeBytes": 196382
+  "notes": "WhatsApp Ceviri v2.7: baslatici logosu WindowManager piksel boyutu 28dp/30dp olarak sabitlendi",
+  "updatedAt": "2026-11-27T11:43:35.380Z",
+  "sizeBytes": 196442
 }

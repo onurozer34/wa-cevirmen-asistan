@@ -73,9 +73,10 @@ class OverlayController(
         view.setOnClickListener { onOpenPanelRequested() }
 
         val density = context.resources.displayMetrics.density
+        val boxPx = (30 * density).toInt()
         val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
+            boxPx,
+            boxPx,
             WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
             PixelFormat.TRANSLUCENT

@@ -463,7 +463,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="14dp"
                 android:gravity="center"
-                android:text="WhatsApp Çeviri • Sürüm 2.6"
+                android:text="WhatsApp Çeviri • Sürüm 2.7"
                 android:textColor="#801A1A1A"
                 android:textSize="11.5sp" />
 
