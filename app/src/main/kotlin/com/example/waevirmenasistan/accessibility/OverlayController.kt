@@ -73,7 +73,7 @@ class OverlayController(
         view.setOnClickListener { onOpenPanelRequested() }
 
         val density = context.resources.displayMetrics.density
-        val boxPx = (30 * density).toInt()
+        val boxPx = (42 * density).toInt()
         val params = WindowManager.LayoutParams(
             boxPx,
             boxPx,
