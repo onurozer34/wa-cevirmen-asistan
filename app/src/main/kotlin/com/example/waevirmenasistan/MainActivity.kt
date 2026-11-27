@@ -34,6 +34,7 @@ class MainActivity : Activity() {
 
     private lateinit var txtServiceStatusTitle: TextView
     private lateinit var txtServiceStatusDesc: TextView
+    private lateinit var btnToggleActive: Button
     private lateinit var btnEnableAccess: Button
     private lateinit var btnOpenWhatsApp: Button
 
@@ -102,6 +103,7 @@ class MainActivity : Activity() {
     private fun bindViews() {
         txtServiceStatusTitle = findViewById(R.id.txtServiceStatusTitle)
         txtServiceStatusDesc = findViewById(R.id.txtServiceStatusDesc)
+        btnToggleActive = findViewById(R.id.btnToggleActive)
         btnEnableAccess = findViewById(R.id.btnEnableAccess)
         btnOpenWhatsApp = findViewById(R.id.btnOpenWhatsApp)
 
@@ -224,7 +226,8 @@ class MainActivity : Activity() {
             websiteUrl = AppSettings.DEFAULT_WEBSITE_URL,
             websiteKnowledge = cachedWebsiteKnowledge,
             websiteUpdatedAt = cachedWebsiteUpdatedAt,
-            instantClickTranslate = swInstantClick.isChecked
+            instantClickTranslate = swInstantClick.isChecked,
+            assistantActive = repo.isAssistantActive()
         )
     }
 
@@ -247,6 +250,18 @@ class MainActivity : Activity() {
             if (!isPopulatingForm) {
                 repo.saveInstantClick(isChecked)
             }
+        }
+
+        btnToggleActive.setOnClickListener {
+            if (!WhatsAppTranslatorAccessibilityService.isEnabled(this)) {
+                showStatus("Önce Ayarlar butonundan Erişilebilirlik iznini açmalısınız.", isError = true)
+                WhatsAppTranslatorAccessibilityService.openAccessibilitySettings(this)
+                return@setOnClickListener
+            }
+            val nextState = !repo.isAssistantActive()
+            repo.saveAssistantActive(nextState)
+            WhatsAppTranslatorAccessibilityService.syncActiveState(nextState)
+            refreshAccessibilityStatus()
         }
 
         btnEnableAccess.setOnClickListener {
@@ -378,16 +393,37 @@ class MainActivity : Activity() {
     }
 
     private fun refreshAccessibilityStatus() {
-        val enabled = WhatsAppTranslatorAccessibilityService.isEnabled(this)
+        val permEnabled = WhatsAppTranslatorAccessibilityService.isEnabled(this)
+        val isActive = repo.isAssistantActive()
         btnEnableAccess.text = "Ayarlar"
-        if (enabled) {
-            txtServiceStatusTitle.text = "Erişilebilirlik Servisi Aktif"
-            txtServiceStatusTitle.setTextColor(Color.parseColor("#69416F"))
-            txtServiceStatusDesc.text = "WhatsApp içinde mesaja dokununca Çeviri butonu ve üst ekran otomatik görünür."
-        } else {
+
+        if (!permEnabled) {
             txtServiceStatusTitle.text = "Erişilebilirlik İzni Gerekli"
             txtServiceStatusTitle.setTextColor(Color.parseColor("#1A1A1A"))
-            txtServiceStatusDesc.text = "WhatsApp mesajlarını okumak ve onay sonrası cevap kutusuna yazabilmek için izni açın."
+            txtServiceStatusDesc.text = "Önce Ayarlar'dan Erişilebilirlik iznini açın; ardından yalnızca ihtiyacınız olduğunda Çeviriyi Başlat'a basın."
+            btnEnableAccess.setBackgroundResource(R.drawable.bg_btn_primary)
+            btnEnableAccess.setTextColor(Color.WHITE)
+            btnToggleActive.setBackgroundResource(R.drawable.bg_btn_purple)
+            btnToggleActive.setTextColor(Color.WHITE)
+            btnToggleActive.text = "İzni Aç ve Başlat"
+        } else if (isActive) {
+            txtServiceStatusTitle.text = "Asistan Aktif — WhatsApp'ta Çalışıyor"
+            txtServiceStatusTitle.setTextColor(Color.parseColor("#69416F"))
+            txtServiceStatusDesc.text = "WhatsApp içinde çeviri açık. İşiniz bitince Çeviriyi Durdur'a basıp tamamen kapatabilirsiniz."
+            btnEnableAccess.setBackgroundResource(R.drawable.bg_btn_secondary)
+            btnEnableAccess.setTextColor(Color.parseColor("#1A1A1A"))
+            btnToggleActive.setBackgroundResource(R.drawable.bg_btn_primary)
+            btnToggleActive.setTextColor(Color.WHITE)
+            btnToggleActive.text = "Çeviriyi Durdur"
+        } else {
+            txtServiceStatusTitle.text = "Asistan Beklemede (Kapalı)"
+            txtServiceStatusTitle.setTextColor(Color.parseColor("#1A1A1A"))
+            txtServiceStatusDesc.text = "Kapalıyken WhatsApp'ta simge görünmez ve çalışmaz. Sadece ihtiyacınız olduğunda başlatın."
+            btnEnableAccess.setBackgroundResource(R.drawable.bg_btn_secondary)
+            btnEnableAccess.setTextColor(Color.parseColor("#1A1A1A"))
+            btnToggleActive.setBackgroundResource(R.drawable.bg_btn_purple)
+            btnToggleActive.setTextColor(Color.WHITE)
+            btnToggleActive.text = "Çeviriyi Başlat"
         }
     }
 

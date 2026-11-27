@@ -53,6 +53,10 @@ class WhatsAppTranslatorAccessibilityService : AccessibilityService() {
     }
 
     private val clipboardListener = ClipboardManager.OnPrimaryClipChangedListener {
+        if (!settingsRepo.isAssistantActive()) {
+            overlay.hideAllOverlays()
+            return@OnPrimaryClipChangedListener
+        }
         if (!isWhatsAppForeground) return@OnPrimaryClipChangedListener
         val waRoot = findWhatsAppRoot() ?: return@OnPrimaryClipChangedListener
         if (!WhatsAppNodeHelper.isInChatScreen(waRoot, screenHeight, screenWidth)) return@OnPrimaryClipChangedListener
@@ -96,6 +100,12 @@ class WhatsAppTranslatorAccessibilityService : AccessibilityService() {
 
         val eventPkg = event.packageName?.toString().orEmpty()
         if (eventPkg == packageName || eventPkg.contains("inputmethod", ignoreCase = true)) {
+            return
+        }
+
+        if (!settingsRepo.isAssistantActive()) {
+            isWhatsAppForeground = false
+            overlay.hideAllOverlays()
             return
         }
 
@@ -332,6 +342,15 @@ class WhatsAppTranslatorAccessibilityService : AccessibilityService() {
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
             ) ?: return false
             return enabled.split(':').any { it.equals(expected, ignoreCase = true) }
+        }
+
+        fun syncActiveState(active: Boolean) {
+            if (!active) {
+                instance?.let { svc ->
+                    svc.isWhatsAppForeground = false
+                    svc.mainHandler.post { svc.overlay.hideAllOverlays() }
+                }
+            }
         }
 
         fun openAccessibilitySettings(context: Context) {

@@ -1,8 +1,8 @@
 {
-  "versionCode": 19,
-  "versionName": "2.8",
-  "downloadUrl": "https://github.com/onurozer34/wa-cevirmen-asistan/releases/download/v2.8/WA-Cevirmen-Asistan.apk",
-  "notes": "WhatsApp Ceviri v2.8: dengeli 40dp/42dp baslatici logosu",
-  "updatedAt": "2026-11-27T11:46:52.175Z",
-  "sizeBytes": 196438
+  "versionCode": 20,
+  "versionName": "2.9",
+  "downloadUrl": "https://github.com/onurozer34/wa-cevirmen-asistan/releases/download/v2.9/WA-Cevirmen-Asistan.apk",
+  "notes": "WhatsApp Ceviri v2.9: istege bagli Ceviriyi Baslat / Durdur anahtari (varsayilan beklemede)",
+  "updatedAt": "2026-11-27T13:55:48.506Z",
+  "sizeBytes": 197658
 }

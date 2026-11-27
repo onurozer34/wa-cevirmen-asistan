@@ -88,7 +88,8 @@ data class AppSettings(
     val websiteUrl: String = DEFAULT_WEBSITE_URL,
     val websiteKnowledge: String = "",
     val websiteUpdatedAt: Long = 0L,
-    val instantClickTranslate: Boolean = true
+    val instantClickTranslate: Boolean = true,
+    val assistantActive: Boolean = false
 ) {
     companion object {
         const val DEFAULT_BUSINESS_NAME = "Mor Media Works"
@@ -152,8 +153,17 @@ class SettingsRepository(context: Context) {
             websiteUrl = AppSettings.DEFAULT_WEBSITE_URL,
             websiteKnowledge = prefs.getString("websiteKnowledge", "") ?: "",
             websiteUpdatedAt = prefs.getLong("websiteUpdatedAt", 0L),
-            instantClickTranslate = instantClick
+            instantClickTranslate = instantClick,
+            assistantActive = prefs.getBoolean("assistantActive", false)
         )
+    }
+
+    fun isAssistantActive(): Boolean = prefs.getBoolean("assistantActive", false)
+
+    fun saveAssistantActive(active: Boolean) {
+        prefs.edit()
+            .putBoolean("assistantActive", active)
+            .apply()
     }
 
     fun saveInstantClick(enabled: Boolean) {
@@ -178,6 +188,7 @@ class SettingsRepository(context: Context) {
             .putLong("websiteUpdatedAt", settings.websiteUpdatedAt)
             .putBoolean("instantClickTranslate", settings.instantClickTranslate)
             .putBoolean("instant_v24_default_applied", true)
+            .putBoolean("assistantActive", settings.assistantActive)
             .apply()
     }
 }

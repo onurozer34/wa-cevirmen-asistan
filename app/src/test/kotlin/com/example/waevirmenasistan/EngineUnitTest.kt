@@ -54,6 +54,7 @@ class EngineUnitTest {
         assertEquals("Mor Media Works", withKey.businessName)
         assertEquals("https://www.istanbulphotoshoot.com/", withKey.websiteUrl)
         assertTrue(withKey.instantClickTranslate)
+        assertFalse(withKey.assistantActive)
         assertTrue(withKey.businessContext.contains("100€"))
         assertTrue(withKey.businessContext.contains("150€"))
         assertTrue(withKey.businessContext.contains("200€"))
