@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAF9F6"
+    android:orientation="vertical">
+
+    <!-- Dark Ink Top App Bar -->
+    <LinearLayout
+        android:id="@+id/topHeaderBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1A1A1A"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="14dp">
+
+        <FrameLayout
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_lang_badge">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_spark" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="11dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WA Çevirmen Asistan"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtHeaderSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mobil WhatsApp Müşteri Asistanı"
+                android:textColor="#B8FFFFFF"
+                android:textSize="11.5sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtHeaderModeBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:background="@drawable/bg_pill_dark"
+            android:gravity="center"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="API'siz"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#69416F" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <!-- 1. Accessibility & Launch Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_overlay_card"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1. WHATSAPP ERİŞİM İZNİ"
+                    android:textColor="#69416F"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtServiceStatusTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Erişilebilirlik İzni Gerekli"
+                    android:textColor="#1A1A1A"
+                    android:textSize="14.5sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtServiceStatusDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="WhatsApp içinde mesaja dokununca Çevir butonu ve üst ekranın görünmesi için izni açın."
+                    android:textColor="#B31A1A1A"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginTop="11dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnEnableAccess"
+                        android:layout_width="0dp"
+                        android:layout_height="42dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_btn_primary"
+                        android:text="İzni Etkinleştir"
+                        android:textAllCaps="false"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btnOpenWhatsApp"
+                        android:layout_width="0dp"
+                        android:layout_height="42dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_btn_secondary"
+                        android:text="WhatsApp'ı Aç"
+                        android:textAllCaps="false"
+                        android:textColor="#1A1A1A"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- GitHub Remote OTA Update Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/bg_subcard_accent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="14dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="UZAKTAN GÜNCELLEME (OTA)"
+                        android:textColor="#69416F"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtOtaStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Sürüm kontrol ediliyor..."
+                        android:textColor="#1A1A1A"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnOtaAction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_btn_secondary"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Denetle"
+                    android:textAllCaps="false"
+                    android:textColor="#69416F"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- 2. Engine & API Settings Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/bg_overlay_card"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2. API AYARLARI"
+                    android:textColor="#69416F"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="AI Sağlayıcı"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spnProvider"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp" />
+
+                <LinearLayout
+                    android:id="@+id/customUrlContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Özel OpenAI Uyumlu Base URL"
+                        android:textColor="#1A1A1A"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edtCustomBaseUrl"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_input_field"
+                        android:hint="https://api.example.com/v1"
+                        android:inputType="textUri"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:textColor="#1A1A1A"
+                        android:textSize="12.5sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:text="Model"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spnModel"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp" />
+
+                <EditText
+                    android:id="@+id/edtCustomModel"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="Model ID (ör. gpt-4o-mini)"
+                    android:inputType="text"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12.5sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:text="API Anahtarı (Zorunlu)"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/edtApiKey"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_input_field"
+                        android:hint="AIza... veya sk-..."
+                        android:inputType="textPassword"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:singleLine="true"
+                        android:textColor="#1A1A1A"
+                        android:textSize="12.5sp" />
+
+                    <Button
+                        android:id="@+id/btnTestApi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_btn_secondary"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Test Et"
+                        android:textAllCaps="false"
+                        android:textColor="#69416F"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 3. Business Persona & Behavior Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/bg_overlay_card"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3. İŞLETME KİMLİĞİ VE DAVRANIŞ"
+                    android:textColor="#69416F"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="İşletme / Marka Adı"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtBusinessName"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="Örn: Atelier Studio İstanbul"
+                    android:inputType="textCapWords"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:singleLine="true"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12.5sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:text="Hizmet, Fiyat ve Çalışma Notları"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtBusinessContext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_input_field"
+                    android:gravity="top|start"
+                    android:hint="Örn: Çekim paketleri 250€'dan başlar. Randevu ile 10:00-19:00 açığız."
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minLines="2"
+                    android:padding="10dp"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12.5sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:text="Web Sitesi URL (Otomatik Kalıcı Bilgi Kaynağı)"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtWebsiteUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="https://www.istanbulphotoshoot.com/pricing/"
+                    android:inputType="textUri"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:singleLine="true"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12.5sp" />
+
+                <TextView
+                    android:id="@+id/txtWebsiteStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="#69416F"
+                    android:textSize="11sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:text="Varsayılan Yanıt Tonu"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spnTone"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp" />
+
+                <Switch
+                    android:id="@+id/swInstantClick"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Mesaja tıklayınca buton beklemeden anında çevir"
+                    android:textColor="#1A1A1A"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtFormStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_subcard_accent"
+                android:padding="11dp"
+                android:textColor="#1A1A1A"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnSaveSettings"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/bg_btn_primary"
+                android:text="Ayarları Kaydet"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- 4. Guide Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:layout_marginBottom="14dp"
+                android:background="@drawable/bg_overlay_card"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NASIL KULLANILIR?"
+                    android:textColor="#69416F"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="1. Yukarıdan Erişilebilirlik iznini açıp API anahtarınızı kaydedin ve WhatsApp'a geçin.\n2. Yabancı müşterinin mesajına dokunun; beliren Çevir ve Yanıtla butonuna basın.\n3. Üst pencereden çeviriyi okuyup cevabı inceleyin; düzenleme gerekiyorsa yazıp Uygula'ya basın, onayladığınızda aşağı okla WhatsApp kutusuna aktarın."
+                    android:textColor="#CC1A1A1A"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="4dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtVersionFooter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="14dp"
+                android:gravity="center"
+                android:text="Sürüm 1.6"
+                android:textColor="#801A1A1A"
+                android:textSize="11.5sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

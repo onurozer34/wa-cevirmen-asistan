@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Back Reply Bubble (Mor Media Works Plum Purple #8D6F91 -> #69416F) -->
+    <path android:pathData="M48,29 H75 C78.87,29 82,32.13 82,36 V54 C82,57.87 78.87,61 75,61 H72 L79,68 L65,61 H48 C44.13,61 41,57.87 41,54 V36 C41,32.13 44.13,29 48,29 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endColor="#69416F"
+                android:endX="82"
+                android:endY="68"
+                android:startColor="#8D6F91"
+                android:startX="41"
+                android:startY="29"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+
+    <!-- Crisp 4-Point AI Spark inside Reply Bubble -->
+    <path
+        android:fillColor="#FAF9F6"
+        android:pathData="M62.5,36.5 L64.3,42.2 L70,44 L64.3,45.8 L62.5,51.5 L60.7,45.8 L55,44 L60.7,42.2 Z" />
+
+    <!-- Soft Material Elevation Shadow under Front Bubble -->
+    <path
+        android:fillColor="#40000000"
+        android:pathData="M33,46.5 H60 C63.87,46.5 67,49.63 67,53.5 V70.5 C67,74.37 63.87,77.5 60,77.5 H42 L29,84.5 L34,77.5 H33 C29.13,77.5 26,74.37 26,70.5 V53.5 C26,49.63 29.13,46.5 33,46.5 Z" />
+
+    <!-- Front Customer Message Bubble (Brand Off-White #FAF9F6) -->
+    <path
+        android:fillColor="#FAF9F6"
+        android:pathData="M33,45 H60 C63.87,45 67,48.13 67,52 V69 C67,72.87 63.87,76 60,76 H42 L29,83 L34,76 H33 C29.13,76 26,72.87 26,69 V52 C26,48.13 29.13,45 33,45 Z" />
+
+    <!-- Geometric 'A' Translation Glyph (#1A1A1A) -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M34.5,67 L40,53.5 L45.5,67 M36.5,63 H43.5"
+        android:strokeColor="#1A1A1A"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:strokeWidth="2.6" />
+
+    <!-- Translation Text Lines in Mor Media Works Purple (#69416F) -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M50,56 H59.5 M50,61.5 H57.5 M50,67 H55.5"
+        android:strokeColor="#69416F"
+        android:strokeLineCap="round"
+        android:strokeWidth="2.4" />
+</vector>
