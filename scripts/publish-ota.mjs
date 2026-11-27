@@ -69,12 +69,12 @@ if (ghAuth.status === 0) {
   const hasRelease = spawnSync('gh', ['release', 'view', tag, '-R', githubRepo], { stdio: 'ignore' });
   if (hasRelease.status === 0) {
     execSync(
-      `gh release upload ${tag} "${apkSourcePath}#WA-Cevirmen-Asistan.apk" --clobber -R ${githubRepo}`,
+      `gh release upload ${tag} "${otaApkPath}" --clobber -R ${githubRepo}`,
       { cwd: rootDir, stdio: 'inherit' }
     );
   } else {
     execSync(
-      `gh release create ${tag} "${apkSourcePath}#WA-Cevirmen-Asistan.apk" -R ${githubRepo} --title "WA Çevirmen Asistan ${tag}" --notes "${releaseNotes.replace(/"/g, '\\"')}"`,
+      `gh release create ${tag} "${otaApkPath}" -R ${githubRepo} --title "WA Çevirmen Asistan ${tag}" --notes "${releaseNotes.replace(/"/g, '\\"')}"`,
       { cwd: rootDir, stdio: 'inherit' }
     );
   }
