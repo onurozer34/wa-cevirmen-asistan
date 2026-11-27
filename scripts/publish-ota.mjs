@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -14,6 +14,7 @@ const otaApkPath = path.join(otaPublicDir, 'WA-Cevirmen-Asistan.apk');
 const otaManifestPath = path.join(otaPublicDir, 'version.json');
 const rootManifestPath = path.join(rootDir, 'version.json');
 const downloadsApkPath = path.join(process.env.USERPROFILE || 'C:\\Users\\Public', 'Downloads', 'WA-Cevirmen-Asistan.apk');
+const githubRepo = 'onurozer34/wa-cevirmen-asistan';
 
 const gradleContent = fs.readFileSync(buildGradlePath, 'utf8');
 const codeMatch = gradleContent.match(/versionCode\s*=\s*(\d+)/);
@@ -49,7 +50,7 @@ const manifest = {
 const githubManifest = {
   versionCode,
   versionName,
-  downloadUrl: `https://github.com/onurozer34/wa-cevirmen-asistan/releases/download/v${versionName}/WA-Cevirmen-Asistan.apk`,
+  downloadUrl: `https://github.com/${githubRepo}/releases/download/v${versionName}/WA-Cevirmen-Asistan.apk`,
   notes,
   updatedAt,
   sizeBytes
@@ -60,3 +61,23 @@ fs.writeFileSync(rootManifestPath, JSON.stringify(githubManifest, null, 2) + '\n
 console.log('OTA manifest written:', manifest);
 
 execSync('npx --yes wrangler deploy', { cwd: otaWorkerDir, stdio: 'inherit' });
+
+const ghAuth = spawnSync('gh', ['auth', 'status'], { stdio: 'ignore' });
+if (ghAuth.status === 0) {
+  const tag = `v${versionName}`;
+  const releaseNotes = `versionCode: ${versionCode}\n${notes}`;
+  const hasRelease = spawnSync('gh', ['release', 'view', tag, '-R', githubRepo], { stdio: 'ignore' });
+  if (hasRelease.status === 0) {
+    execSync(
+      `gh release upload ${tag} "${apkSourcePath}#WA-Cevirmen-Asistan.apk" --clobber -R ${githubRepo}`,
+      { cwd: rootDir, stdio: 'inherit' }
+    );
+  } else {
+    execSync(
+      `gh release create ${tag} "${apkSourcePath}#WA-Cevirmen-Asistan.apk" -R ${githubRepo} --title "WA Çevirmen Asistan ${tag}" --notes "${releaseNotes.replace(/"/g, '\\"')}"`,
+      { cwd: rootDir, stdio: 'inherit' }
+    );
+  }
+} else {
+  console.warn('gh CLI is not authenticated; skipped GitHub Release upload.');
+}
