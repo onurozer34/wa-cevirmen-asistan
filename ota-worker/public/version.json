@@ -1,8 +1,8 @@
 {
-  "versionCode": 16,
-  "versionName": "2.5",
+  "versionCode": 17,
+  "versionName": "2.6",
   "downloadUrl": "https://wa-cevirmen-ota.mor-media-drive-sync-bridge.workers.dev/WA-Cevirmen-Asistan.apk",
-  "notes": "WhatsApp Ceviri v2.5: Ayarlar, WhatsApp, Guncelle esit butonlar ve yeni uygulama adi",
-  "updatedAt": "2026-11-27T11:03:11.285Z",
+  "notes": "WhatsApp Ceviri v2.6: WhatsApp icindeki baslatici ikonu %35 kucultuldu (28dp)",
+  "updatedAt": "2026-11-27T11:39:05.984Z",
   "sizeBytes": 196382
 }
