@@ -114,44 +114,44 @@
                         android:maxLines="1"
                         android:paddingStart="6dp"
                         android:paddingEnd="6dp"
-                        android:text="İzin Ayarları"
+                        android:text="Ayarlar"
                         android:textAllCaps="false"
                         android:textColor="#FFFFFF"
-                        android:textSize="11.5sp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <Button
                         android:id="@+id/btnOpenWhatsApp"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:layout_marginStart="6dp"
-                        android:layout_weight="0.8"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
                         android:background="@drawable/bg_btn_secondary"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:paddingStart="6dp"
                         android:paddingEnd="6dp"
-                        android:text="WP Aç"
+                        android:text="WhatsApp"
                         android:textAllCaps="false"
                         android:textColor="#1A1A1A"
-                        android:textSize="11.5sp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <Button
                         android:id="@+id/btnOtaAction"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
-                        android:layout_marginStart="6dp"
-                        android:layout_weight="1.2"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
                         android:background="@drawable/bg_btn_secondary"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:paddingStart="6dp"
                         android:paddingEnd="6dp"
-                        android:text="Güncelleme Denetle"
+                        android:text="Güncelle"
                         android:textAllCaps="false"
                         android:textColor="#69416F"
-                        android:textSize="11.5sp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
@@ -452,7 +452,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:lineSpacingExtra="4dp"
-                    android:text="1. Yukarıdan Erişilebilirlik iznini açıp API anahtarınızı kaydedin ve WP Aç ile WhatsApp'a geçin.\n2. Yabancı müşterinin mesajına dokunun; anında çeviri ve yanıt önerisi üst pencerede açılır.\n3. Üst pencereden çeviriyi okuyup cevabı inceleyin; düzenleme gerekiyorsa yazıp Uygula'ya basın, onayladığınızda aşağı okla WhatsApp kutusuna aktarın."
+                    android:text="1. Yukarıdan Ayarlar butonuyla Erişilebilirlik iznini açıp API anahtarınızı kaydedin ve WhatsApp ile sohbete geçin.\n2. Yabancı müşterinin mesajına dokunun; anında çeviri ve yanıt önerisi üst pencerede açılır.\n3. Üst pencereden çeviriyi okuyup cevabı inceleyin; düzenleme gerekiyorsa yazıp Uygula'ya basın, onayladığınızda aşağı okla WhatsApp kutusuna aktarın."
                     android:textColor="#CC1A1A1A"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -463,7 +463,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="14dp"
                 android:gravity="center"
-                android:text="W. Çeviri Asistan • Sürüm 2.4"
+                android:text="WhatsApp Çeviri • Sürüm 2.5"
                 android:textColor="#801A1A1A"
                 android:textSize="11.5sp" />
 

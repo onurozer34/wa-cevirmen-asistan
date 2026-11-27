@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">W. Çeviri Asistan</string>
-    <string name="accessibility_service_label">W. Çeviri Asistan</string>
-    <string name="accessibility_service_description">WhatsApp ve WhatsApp Business içindeki yabancı dildeki müşteri mesajlarına tıkladığınızda Çevir butonu gösterir, mesajı Türkçeye çevirir ve hazırlanan yanıtı WhatsApp mesaj kutusuna gönderime hazır yazar.</string>
+    <string name="app_name">WhatsApp Çeviri</string>
+    <string name="accessibility_service_label">WhatsApp Çeviri</string>
+    <string name="accessibility_service_description">WhatsApp ve WhatsApp Business içindeki yabancı dildeki müşteri mesajlarına tıkladığınızda Çeviri butonu gösterir, mesajı Türkçeye çevirir ve hazırlanan yanıtı WhatsApp mesaj kutusuna gönderime hazır yazar.</string>
 </resources>

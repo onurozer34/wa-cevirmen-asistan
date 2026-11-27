@@ -1,8 +1,8 @@
 {
-  "versionCode": 15,
-  "versionName": "2.4",
-  "downloadUrl": "https://github.com/onurozer34/wa-cevirmen-asistan/releases/download/v2.4/WA-Cevirmen-Asistan.apk",
-  "notes": "W. Ceviri Asistan v2.4: sade baslik, tek satir Bolum 1, Mor Media Works kalici marka ve fiyat ozeti, aninda ceviri varsayilan acik, tek logo launcher",
-  "updatedAt": "2026-11-27T10:45:32.767Z",
-  "sizeBytes": 196474
+  "versionCode": 16,
+  "versionName": "2.5",
+  "downloadUrl": "https://github.com/onurozer34/wa-cevirmen-asistan/releases/download/v2.5/WA-Cevirmen-Asistan.apk",
+  "notes": "WhatsApp Ceviri v2.5: Ayarlar, WhatsApp, Guncelle esit butonlar ve yeni uygulama adi",
+  "updatedAt": "2026-11-27T11:03:11.285Z",
+  "sizeBytes": 196382
 }

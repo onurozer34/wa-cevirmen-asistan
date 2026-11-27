@@ -29,7 +29,7 @@ if (!fs.existsSync(apkSourcePath)) {
 
 const versionCode = Number(codeMatch[1]);
 const versionName = nameMatch[1];
-const notes = process.argv.slice(2).join(' ') || `W. Çeviri Asistan v${versionName} (build ${versionCode})`;
+const notes = process.argv.slice(2).join(' ') || `WhatsApp Çeviri v${versionName} (build ${versionCode})`;
 
 fs.mkdirSync(otaPublicDir, { recursive: true });
 fs.copyFileSync(apkSourcePath, otaApkPath);
@@ -74,7 +74,7 @@ if (ghAuth.status === 0) {
     );
   } else {
     execSync(
-      `gh release create ${tag} "${otaApkPath}" -R ${githubRepo} --title "W. Çeviri Asistan ${tag}" --notes "${releaseNotes.replace(/"/g, '\\"')}"`,
+      `gh release create ${tag} "${otaApkPath}" -R ${githubRepo} --title "WhatsApp Çeviri ${tag}" --notes "${releaseNotes.replace(/"/g, '\\"')}"`,
       { cwd: rootDir, stdio: 'inherit' }
     );
   }

@@ -138,7 +138,7 @@ class MainActivity : Activity() {
             }
             currentVersionName = vName
             currentVersionCode = vCode.toInt()
-            txtVersionFooter.text = "W. Çeviri Asistan • Sürüm $vName"
+            txtVersionFooter.text = "WhatsApp Çeviri • Sürüm $vName"
         }
     }
 
@@ -379,16 +379,15 @@ class MainActivity : Activity() {
 
     private fun refreshAccessibilityStatus() {
         val enabled = WhatsAppTranslatorAccessibilityService.isEnabled(this)
+        btnEnableAccess.text = "Ayarlar"
         if (enabled) {
             txtServiceStatusTitle.text = "Erişilebilirlik Servisi Aktif"
             txtServiceStatusTitle.setTextColor(Color.parseColor("#69416F"))
             txtServiceStatusDesc.text = "WhatsApp içinde mesaja dokununca Çeviri butonu ve üst ekran otomatik görünür."
-            btnEnableAccess.text = "İzin Ayarları"
         } else {
             txtServiceStatusTitle.text = "Erişilebilirlik İzni Gerekli"
             txtServiceStatusTitle.setTextColor(Color.parseColor("#1A1A1A"))
             txtServiceStatusDesc.text = "WhatsApp mesajlarını okumak ve onay sonrası cevap kutusuna yazabilmek için izni açın."
-            btnEnableAccess.text = "İzni Etkinleştir"
         }
     }
 
@@ -413,21 +412,21 @@ class MainActivity : Activity() {
                         pendingRelease = remote
                         txtOtaStatus.setTextColor(Color.parseColor("#69416F"))
                         txtOtaStatus.text = "Yeni sürüm hazır: v${remote.versionName}"
-                        btnOtaAction.text = "Şimdi Güncelle"
+                        btnOtaAction.text = "Güncelle"
                         btnOtaAction.setBackgroundResource(R.drawable.bg_btn_primary)
                         btnOtaAction.setTextColor(Color.WHITE)
                     } else {
                         pendingRelease = null
                         txtOtaStatus.setTextColor(Color.parseColor("#1A1A1A"))
                         txtOtaStatus.text = "Sürüm güncel (v$currentVersionName)."
-                        btnOtaAction.text = "Güncelleme Denetle"
+                        btnOtaAction.text = "Güncelle"
                         btnOtaAction.setBackgroundResource(R.drawable.bg_btn_secondary)
                         btnOtaAction.setTextColor(Color.parseColor("#69416F"))
                     }
                 }.onFailure {
                     txtOtaStatus.setTextColor(Color.parseColor("#1A1A1A"))
                     txtOtaStatus.text = "Sürüm v$currentVersionName (OTA bağlantısı bekleniyor)."
-                    btnOtaAction.text = "Güncelleme Denetle"
+                    btnOtaAction.text = "Güncelle"
                 }
             }
         }
@@ -445,7 +444,7 @@ class MainActivity : Activity() {
             }
             mainHandler.post {
                 btnOtaAction.isEnabled = true
-                btnOtaAction.text = "Şimdi Güncelle"
+                btnOtaAction.text = "Güncelle"
                 res.onSuccess { apkFile ->
                     txtOtaStatus.text = "İndirme tamamlandı, kurulum açılıyor..."
                     GitHubUpdateChecker.launchApkInstaller(this, apkFile)
