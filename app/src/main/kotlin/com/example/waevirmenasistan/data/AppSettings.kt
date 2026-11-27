@@ -83,13 +83,27 @@ data class AppSettings(
     val model: String = "gemini-3.5-flash-lite",
     val customBaseUrl: String = "",
     val tone: ReplyTone = ReplyTone.WARM_PROFESSIONAL,
-    val businessName: String = "",
-    val businessContext: String = "",
-    val websiteUrl: String = "",
+    val businessName: String = DEFAULT_BUSINESS_NAME,
+    val businessContext: String = DEFAULT_BUSINESS_CONTEXT,
+    val websiteUrl: String = DEFAULT_WEBSITE_URL,
     val websiteKnowledge: String = "",
     val websiteUpdatedAt: Long = 0L,
-    val instantClickTranslate: Boolean = false
+    val instantClickTranslate: Boolean = true
 ) {
+    companion object {
+        const val DEFAULT_BUSINESS_NAME = "Mor Media Works"
+        const val DEFAULT_WEBSITE_URL = "https://www.istanbulphotoshoot.com/"
+        val DEFAULT_BUSINESS_CONTEXT = """
+            • Individual Photosession: 100€/saat (min. 1 saat çekim, 10 fotoğrafa kadar renk düzenleme, tüm ham kareler dahil).
+            • Flying Dress Photo Shooting (En Popüler): 150€/saat (min. 1 saat, 10 fotoğrafa kadar renk düzenleme, tüm ham kareler + seçilen 1 mekânda ücretsiz uçuşan elbise ve elbise asistanı; Ortaköy, Roof Validehan, Roof Galata Terrace).
+            • Love Story: 200€/saat (min. 1 saat, 20 fotoğrafa kadar renk düzenleme, tüm ham kareler dahil).
+            • Full Day Photo Shoot: 500€/gün (min. 6 saat, 30 fotoğrafa kadar renk düzenleme, tüm ham kareler ve özel paket; özel mekân giriş ücretleri hariç).
+            • Özel Teras Girişleri (kişi başı): Roof Validehan (30 dk) 75€, Roof Galata Terrace 75€. Açık alanlar (Ortaköy, Beşiktaş, Karaköy, Galata Kulesi/Köprüsü, İstiklal, Taksim, Eminönü, Sirkeci, Sultanahmet, Süleymaniye, Balat) ücretsizdir.
+            • Teslimat & Çalışma: En iyi saatler gündoğumu (06:30-08:30) ve gün batımı (Golden Hour). Tüm orijinal fotoğraflar (150-300+ kare) çekim hemen sonrası telefona veya bulut bağlantısıyla aktarılır; seçilen retouch kareler birkaç gün içinde teslim edilir. Sürpriz evlilik teklifi ve video çekimleri WhatsApp üzerinden planlanır.
+            • Stüdyo & İletişim: Bereketzade, Kart Çınar Sk. No:4/4, Beyoğlu/İstanbul | +90 532 382 17 34
+        """.trimIndent()
+    }
+
     fun hasApiKey(): Boolean = apiKey.trim().length > 6
 
     fun needsWebsiteSync(nowMs: Long = System.currentTimeMillis()): Boolean {
@@ -113,34 +127,57 @@ class SettingsRepository(context: Context) {
 
     fun load(): AppSettings {
         val provider = AiProvider.fromId(prefs.getString("provider", AiProvider.GEMINI.id))
+        val storedContext = prefs.getString("businessContext", "")?.trim().orEmpty()
+        val effectiveContext = if (storedContext.isNotEmpty()) storedContext else AppSettings.DEFAULT_BUSINESS_CONTEXT
+
+        val migratedInstant = prefs.getBoolean("instant_v24_default_applied", false)
+        val instantClick = if (!migratedInstant) {
+            prefs.edit()
+                .putBoolean("instantClickTranslate", true)
+                .putBoolean("instant_v24_default_applied", true)
+                .apply()
+            true
+        } else {
+            prefs.getBoolean("instantClickTranslate", true)
+        }
+
         return AppSettings(
             provider = provider,
             apiKey = prefs.getString("apiKey", "") ?: "",
             model = prefs.getString("model", provider.defaultModel) ?: provider.defaultModel,
             customBaseUrl = prefs.getString("customBaseUrl", "") ?: "",
             tone = ReplyTone.fromId(prefs.getString("tone", ReplyTone.WARM_PROFESSIONAL.id)),
-            businessName = prefs.getString("businessName", "") ?: "",
-            businessContext = prefs.getString("businessContext", "") ?: "",
-            websiteUrl = prefs.getString("websiteUrl", "") ?: "",
+            businessName = AppSettings.DEFAULT_BUSINESS_NAME,
+            businessContext = effectiveContext,
+            websiteUrl = AppSettings.DEFAULT_WEBSITE_URL,
             websiteKnowledge = prefs.getString("websiteKnowledge", "") ?: "",
             websiteUpdatedAt = prefs.getLong("websiteUpdatedAt", 0L),
-            instantClickTranslate = prefs.getBoolean("instantClickTranslate", false)
+            instantClickTranslate = instantClick
         )
     }
 
+    fun saveInstantClick(enabled: Boolean) {
+        prefs.edit()
+            .putBoolean("instantClickTranslate", enabled)
+            .putBoolean("instant_v24_default_applied", true)
+            .apply()
+    }
+
     fun save(settings: AppSettings) {
+        val finalContext = settings.businessContext.trim().ifEmpty { AppSettings.DEFAULT_BUSINESS_CONTEXT }
         prefs.edit()
             .putString("provider", settings.provider.id)
             .putString("apiKey", settings.apiKey.trim())
             .putString("model", settings.model.trim())
             .putString("customBaseUrl", settings.customBaseUrl.trim())
             .putString("tone", settings.tone.id)
-            .putString("businessName", settings.businessName.trim())
-            .putString("businessContext", settings.businessContext.trim())
-            .putString("websiteUrl", settings.websiteUrl.trim())
+            .putString("businessName", AppSettings.DEFAULT_BUSINESS_NAME)
+            .putString("businessContext", finalContext)
+            .putString("websiteUrl", AppSettings.DEFAULT_WEBSITE_URL)
             .putString("websiteKnowledge", settings.websiteKnowledge.trim())
             .putLong("websiteUpdatedAt", settings.websiteUpdatedAt)
             .putBoolean("instantClickTranslate", settings.instantClickTranslate)
+            .putBoolean("instant_v24_default_applied", true)
             .apply()
     }
 }

@@ -6,8 +6,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -34,8 +32,6 @@ class MainActivity : Activity() {
     private val executor = Executors.newSingleThreadExecutor()
     private val mainHandler = Handler(Looper.getMainLooper())
 
-    private lateinit var txtHeaderSubtitle: TextView
-    private lateinit var txtHeaderModeBadge: TextView
     private lateinit var txtServiceStatusTitle: TextView
     private lateinit var txtServiceStatusDesc: TextView
     private lateinit var btnEnableAccess: Button
@@ -51,7 +47,6 @@ class MainActivity : Activity() {
 
     private lateinit var edtBusinessName: EditText
     private lateinit var edtBusinessContext: EditText
-    private lateinit var edtWebsiteUrl: EditText
     private lateinit var txtWebsiteStatus: TextView
     private lateinit var spnTone: Spinner
     private lateinit var swInstantClick: Switch
@@ -63,13 +58,13 @@ class MainActivity : Activity() {
     private lateinit var btnOtaAction: Button
 
     private var currentModelSelection: String = ""
-    private var cachedWebsiteUrl: String = ""
     private var cachedWebsiteKnowledge: String = ""
     private var cachedWebsiteUpdatedAt: Long = 0L
-    private var currentVersionName: String = "2.2"
-    private var currentVersionCode: Int = 13
+    private var currentVersionName: String = "2.4"
+    private var currentVersionCode: Int = 15
     private var pendingRelease: RemoteReleaseInfo? = null
     private var waitingInstallPermission: Boolean = false
+    private var isPopulatingForm: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,9 +78,11 @@ class MainActivity : Activity() {
         bindViews()
         applyVersionLabels()
         populateSpinners()
-        loadIntoForm(repo.load())
+        val loaded = repo.load()
+        loadIntoForm(loaded)
         setupActions()
         checkRemoteUpdate(manual = false)
+        ensureBackgroundWebsiteSync(loaded)
     }
 
     override fun onResume() {
@@ -103,8 +100,6 @@ class MainActivity : Activity() {
     }
 
     private fun bindViews() {
-        txtHeaderSubtitle = findViewById(R.id.txtHeaderSubtitle)
-        txtHeaderModeBadge = findViewById(R.id.txtHeaderModeBadge)
         txtServiceStatusTitle = findViewById(R.id.txtServiceStatusTitle)
         txtServiceStatusDesc = findViewById(R.id.txtServiceStatusDesc)
         btnEnableAccess = findViewById(R.id.btnEnableAccess)
@@ -120,7 +115,6 @@ class MainActivity : Activity() {
 
         edtBusinessName = findViewById(R.id.edtBusinessName)
         edtBusinessContext = findViewById(R.id.edtBusinessContext)
-        edtWebsiteUrl = findViewById(R.id.edtWebsiteUrl)
         txtWebsiteStatus = findViewById(R.id.txtWebsiteStatus)
         spnTone = findViewById(R.id.spnTone)
         swInstantClick = findViewById(R.id.swInstantClick)
@@ -135,7 +129,7 @@ class MainActivity : Activity() {
     private fun applyVersionLabels() {
         runCatching {
             val pInfo = packageManager.getPackageInfo(packageName, 0)
-            val vName = pInfo.versionName ?: "2.2"
+            val vName = pInfo.versionName ?: "2.4"
             val vCode = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
                 pInfo.longVersionCode
             } else {
@@ -144,8 +138,7 @@ class MainActivity : Activity() {
             }
             currentVersionName = vName
             currentVersionCode = vCode.toInt()
-            txtHeaderSubtitle.text = "Mobil WhatsApp Asistanı • v$vName"
-            txtVersionFooter.text = "WA Çevirmen Asistan • Sürüm $vName ($vCode)"
+            txtVersionFooter.text = "W. Çeviri Asistan • Sürüm $vName"
         }
     }
 
@@ -163,29 +156,28 @@ class MainActivity : Activity() {
     }
 
     private fun loadIntoForm(s: AppSettings) {
+        isPopulatingForm = true
         currentModelSelection = s.model
-        cachedWebsiteUrl = s.websiteUrl.trim()
         cachedWebsiteKnowledge = s.websiteKnowledge
         cachedWebsiteUpdatedAt = s.websiteUpdatedAt
 
         spnProvider.setSelection(AiProvider.entries.indexOf(s.provider).coerceAtLeast(0))
         edtCustomBaseUrl.setText(s.customBaseUrl)
         edtApiKey.setText(s.apiKey)
-        edtBusinessName.setText(s.businessName)
+        edtBusinessName.setText(AppSettings.DEFAULT_BUSINESS_NAME)
         edtBusinessContext.setText(s.businessContext)
-        edtWebsiteUrl.setText(s.websiteUrl)
         spnTone.setSelection(ReplyTone.entries.indexOf(s.tone).coerceAtLeast(0))
         swInstantClick.isChecked = s.instantClickTranslate
 
         if (s.websiteKnowledge.isNotBlank()) {
             txtWebsiteStatus.visibility = View.VISIBLE
             txtWebsiteStatus.setTextColor(Color.parseColor("#69416F"))
-            txtWebsiteStatus.text = "Site bilgileri kalıcı hafızada hazır (${s.websiteKnowledge.length} karakter)."
+            txtWebsiteStatus.text = "Web sitesi kalıcı hafızada hazır (${s.websiteKnowledge.length} karakter)."
         }
 
         syncProviderModels(s.provider, s.model)
-        txtHeaderModeBadge.text = s.activeBadgeLabel()
         refreshAccessibilityStatus()
+        isPopulatingForm = false
     }
 
     private fun syncProviderModels(provider: AiProvider, preferredModel: String?) {
@@ -218,10 +210,8 @@ class MainActivity : Activity() {
             provider.models[idx].first
         }
 
-        val url = edtWebsiteUrl.text.toString().trim()
-        val sameUrl = url == cachedWebsiteUrl
-        val knowledge = if (sameUrl) cachedWebsiteKnowledge else ""
-        val updatedAt = if (sameUrl) cachedWebsiteUpdatedAt else 0L
+        val contextNotes = edtBusinessContext.text.toString().trim()
+            .ifEmpty { AppSettings.DEFAULT_BUSINESS_CONTEXT }
 
         return AppSettings(
             provider = provider,
@@ -229,24 +219,16 @@ class MainActivity : Activity() {
             model = model,
             customBaseUrl = edtCustomBaseUrl.text.toString().trim(),
             tone = tone,
-            businessName = edtBusinessName.text.toString().trim(),
-            businessContext = edtBusinessContext.text.toString().trim(),
-            websiteUrl = url,
-            websiteKnowledge = knowledge,
-            websiteUpdatedAt = updatedAt,
+            businessName = AppSettings.DEFAULT_BUSINESS_NAME,
+            businessContext = contextNotes,
+            websiteUrl = AppSettings.DEFAULT_WEBSITE_URL,
+            websiteKnowledge = cachedWebsiteKnowledge,
+            websiteUpdatedAt = cachedWebsiteUpdatedAt,
             instantClickTranslate = swInstantClick.isChecked
         )
     }
 
     private fun setupActions() {
-        edtApiKey.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                txtHeaderModeBadge.text = collectForm().activeBadgeLabel()
-            }
-        })
-
         spnProvider.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             private var initialized = false
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -257,9 +239,14 @@ class MainActivity : Activity() {
                 } else {
                     syncProviderModels(prov, prov.defaultModel)
                 }
-                txtHeaderModeBadge.text = collectForm().activeBadgeLabel()
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        swInstantClick.setOnCheckedChangeListener { _, isChecked ->
+            if (!isPopulatingForm) {
+                repo.saveInstantClick(isChecked)
+            }
         }
 
         btnEnableAccess.setOnClickListener {
@@ -299,15 +286,10 @@ class MainActivity : Activity() {
                 return@setOnClickListener
             }
 
-            if (s.websiteUrl.isNotBlank()) {
+            if (s.needsWebsiteSync()) {
                 syncWebsiteAndSave(s)
             } else {
-                cachedWebsiteUrl = ""
-                cachedWebsiteKnowledge = ""
-                cachedWebsiteUpdatedAt = 0L
-                txtWebsiteStatus.visibility = View.GONE
                 repo.save(s)
-                txtHeaderModeBadge.text = s.activeBadgeLabel()
                 showStatus("Ayarlar kaydedildi. WhatsApp'ta anında aktif olacaktır.", isError = false)
             }
         }
@@ -342,12 +324,31 @@ class MainActivity : Activity() {
         }
     }
 
+    private fun ensureBackgroundWebsiteSync(settings: AppSettings) {
+        if (!settings.needsWebsiteSync()) return
+        executor.execute {
+            runCatching { WebsiteKnowledgeFetcher.fetchAndExtract(settings.websiteUrl) }
+                .onSuccess { extracted ->
+                    val now = System.currentTimeMillis()
+                    cachedWebsiteKnowledge = extracted
+                    cachedWebsiteUpdatedAt = now
+                    val latest = repo.load().copy(
+                        websiteKnowledge = extracted,
+                        websiteUpdatedAt = now
+                    )
+                    repo.save(latest)
+                    mainHandler.post {
+                        txtWebsiteStatus.visibility = View.VISIBLE
+                        txtWebsiteStatus.setTextColor(Color.parseColor("#69416F"))
+                        txtWebsiteStatus.text = "Web sitesi kalıcı hafızada hazır (${extracted.length} karakter)."
+                    }
+                }
+        }
+    }
+
     private fun syncWebsiteAndSave(settings: AppSettings) {
         btnSaveSettings.isEnabled = false
-        btnSaveSettings.text = "Site Bilgileri Kaydediliyor..."
-        txtWebsiteStatus.visibility = View.VISIBLE
-        txtWebsiteStatus.setTextColor(Color.parseColor("#69416F"))
-        txtWebsiteStatus.text = "Web sitesi içeriği kalıcı hafızaya alınıyor..."
+        btnSaveSettings.text = "Ayarlar Kaydediliyor..."
 
         executor.execute {
             val res = runCatching { WebsiteKnowledgeFetcher.fetchAndExtract(settings.websiteUrl) }
@@ -356,7 +357,6 @@ class MainActivity : Activity() {
                 btnSaveSettings.text = "Ayarları Kaydet"
                 res.onSuccess { extracted ->
                     val now = System.currentTimeMillis()
-                    cachedWebsiteUrl = settings.websiteUrl
                     cachedWebsiteKnowledge = extracted
                     cachedWebsiteUpdatedAt = now
 
@@ -365,15 +365,12 @@ class MainActivity : Activity() {
                         websiteUpdatedAt = now
                     )
                     repo.save(updated)
-                    txtHeaderModeBadge.text = updated.activeBadgeLabel()
+                    txtWebsiteStatus.visibility = View.VISIBLE
                     txtWebsiteStatus.setTextColor(Color.parseColor("#69416F"))
-                    txtWebsiteStatus.text = "Site bilgileri kalıcı hafızaya kaydedildi (${extracted.length} karakter)."
+                    txtWebsiteStatus.text = "Web sitesi kalıcı hafızada hazır (${extracted.length} karakter)."
                     showStatus("Ayarlar ve web sitesi bilgileri kalıcı olarak kaydedildi.", isError = false)
-                }.onFailure { err ->
+                }.onFailure {
                     repo.save(settings)
-                    txtHeaderModeBadge.text = settings.activeBadgeLabel()
-                    txtWebsiteStatus.setTextColor(Color.parseColor("#B42318"))
-                    txtWebsiteStatus.text = "Web sitesi şu an alınamadı (ilk WhatsApp işleminde otomatik tekrar denenecek): ${err.message}"
                     showStatus("Ayarlar kaydedildi.", isError = false)
                 }
             }
@@ -423,14 +420,14 @@ class MainActivity : Activity() {
                         pendingRelease = null
                         txtOtaStatus.setTextColor(Color.parseColor("#1A1A1A"))
                         txtOtaStatus.text = "Sürüm güncel (v$currentVersionName)."
-                        btnOtaAction.text = "Denetle"
+                        btnOtaAction.text = "Güncelleme Denetle"
                         btnOtaAction.setBackgroundResource(R.drawable.bg_btn_secondary)
                         btnOtaAction.setTextColor(Color.parseColor("#69416F"))
                     }
                 }.onFailure {
                     txtOtaStatus.setTextColor(Color.parseColor("#1A1A1A"))
                     txtOtaStatus.text = "Sürüm v$currentVersionName (OTA bağlantısı bekleniyor)."
-                    btnOtaAction.text = "Denetle"
+                    btnOtaAction.text = "Güncelleme Denetle"
                 }
             }
         }

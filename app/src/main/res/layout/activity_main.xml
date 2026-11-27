@@ -5,7 +5,7 @@
     android:background="#FAF9F6"
     android:orientation="vertical">
 
-    <!-- Dark Ink Top App Bar -->
+    <!-- Dark Ink Top App Bar: Only Logo + App Name -->
     <LinearLayout
         android:id="@+id/topHeaderBar"
         android:layout_width="match_parent"
@@ -14,58 +14,24 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="16dp"
-        android:paddingTop="14dp"
+        android:paddingTop="13dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="14dp">
+        android:paddingBottom="13dp">
 
-        <FrameLayout
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="@drawable/bg_lang_badge">
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_gravity="center"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_spark" />
-        </FrameLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="11dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="WA Çevirmen Asistan"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txtHeaderSubtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mobil WhatsApp Müşteri Asistanı"
-                android:textColor="#B8FFFFFF"
-                android:textSize="11.5sp" />
-        </LinearLayout>
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_launcher_round" />
 
         <TextView
-            android:id="@+id/txtHeaderModeBadge"
             android:layout_width="wrap_content"
-            android:layout_height="26dp"
-            android:background="@drawable/bg_pill_dark"
-            android:gravity="center"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:text="API'siz"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="11dp"
+            android:text="@string/app_name"
             android:textColor="#FFFFFF"
-            android:textSize="11sp"
+            android:textSize="17sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -86,7 +52,7 @@
             android:orientation="vertical"
             android:padding="14dp">
 
-            <!-- 1. Accessibility & Launch Card -->
+            <!-- 1. Accessibility, WhatsApp Launch & OTA Check Card -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,7 +63,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1. WHATSAPP ERİŞİM İZNİ"
+                    android:text="1. WHATSAPP ERİŞİM İZNİ VE GÜNCELLEME"
                     android:textColor="#69416F"
                     android:textSize="11sp"
                     android:textStyle="bold" />
@@ -117,93 +83,77 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:text="WhatsApp içinde mesaja dokununca Çevir butonu ve üst ekranın görünmesi için izni açın."
+                    android:text="WhatsApp içinde mesaja dokununca Çeviri butonu ve üst ekranın görünmesi için izni açın."
                     android:textColor="#B31A1A1A"
                     android:textSize="12sp" />
 
+                <TextView
+                    android:id="@+id/txtOtaStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Güncelleme durumu kontrol ediliyor..."
+                    android:textColor="#69416F"
+                    android:textSize="11.5sp"
+                    android:textStyle="bold" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="42dp"
-                    android:layout_marginTop="11dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/btnEnableAccess"
                         android:layout_width="0dp"
-                        android:layout_height="42dp"
+                        android:layout_height="40dp"
                         android:layout_weight="1"
                         android:background="@drawable/bg_btn_primary"
-                        android:text="İzni Etkinleştir"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:paddingStart="6dp"
+                        android:paddingEnd="6dp"
+                        android:text="İzin Ayarları"
                         android:textAllCaps="false"
                         android:textColor="#FFFFFF"
-                        android:textSize="13sp"
+                        android:textSize="11.5sp"
                         android:textStyle="bold" />
 
                     <Button
                         android:id="@+id/btnOpenWhatsApp"
                         android:layout_width="0dp"
-                        android:layout_height="42dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="0.8"
                         android:background="@drawable/bg_btn_secondary"
-                        android:text="WhatsApp'ı Aç"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:paddingStart="6dp"
+                        android:paddingEnd="6dp"
+                        android:text="WP Aç"
                         android:textAllCaps="false"
                         android:textColor="#1A1A1A"
-                        android:textSize="13sp"
+                        android:textSize="11.5sp"
                         android:textStyle="bold" />
-                </LinearLayout>
-            </LinearLayout>
 
-            <!-- GitHub Remote OTA Update Card -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="11dp"
-                android:background="@drawable/bg_subcard_accent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="14dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="UZAKTAN GÜNCELLEME (OTA)"
+                    <Button
+                        android:id="@+id/btnOtaAction"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1.2"
+                        android:background="@drawable/bg_btn_secondary"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:paddingStart="6dp"
+                        android:paddingEnd="6dp"
+                        android:text="Güncelleme Denetle"
+                        android:textAllCaps="false"
                         android:textColor="#69416F"
-                        android:textSize="10.5sp"
+                        android:textSize="11.5sp"
                         android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/txtOtaStatus"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="Sürüm kontrol ediliyor..."
-                        android:textColor="#1A1A1A"
-                        android:textSize="12sp" />
                 </LinearLayout>
-
-                <Button
-                    android:id="@+id/btnOtaAction"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_btn_secondary"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:text="Denetle"
-                    android:textAllCaps="false"
-                    android:textColor="#69416F"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
             <!-- 2. Engine & API Settings Card -->
@@ -370,7 +320,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="İşletme / Marka Adı"
+                    android:text="İşletme / Marka Adı (Kalıcı)"
                     android:textColor="#1A1A1A"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -380,14 +330,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
-                    android:background="@drawable/bg_input_field"
-                    android:hint="Örn: Atelier Studio İstanbul"
-                    android:inputType="textCapWords"
+                    android:background="@drawable/bg_subcard_accent"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:longClickable="false"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:singleLine="true"
-                    android:textColor="#1A1A1A"
-                    android:textSize="12.5sp" />
+                    android:text="Mor Media Works"
+                    android:textColor="#69416F"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -405,41 +359,20 @@
                     android:layout_marginTop="4dp"
                     android:background="@drawable/bg_input_field"
                     android:gravity="top|start"
-                    android:hint="Örn: Çekim paketleri 250€'dan başlar. Randevu ile 10:00-19:00 açığız."
                     android:inputType="textMultiLine|textCapSentences"
-                    android:minLines="2"
+                    android:lineSpacingExtra="2dp"
+                    android:maxLines="12"
+                    android:minLines="6"
                     android:padding="10dp"
+                    android:scrollbars="vertical"
                     android:textColor="#1A1A1A"
-                    android:textSize="12.5sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="9dp"
-                    android:text="Web Sitesi URL (Otomatik Kalıcı Bilgi Kaynağı)"
-                    android:textColor="#1A1A1A"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/edtWebsiteUrl"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/bg_input_field"
-                    android:hint="https://www.istanbulphotoshoot.com/pricing/"
-                    android:inputType="textUri"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:singleLine="true"
-                    android:textColor="#1A1A1A"
-                    android:textSize="12.5sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/txtWebsiteStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="5dp"
                     android:textColor="#69416F"
                     android:textSize="11sp"
                     android:visibility="gone" />
@@ -467,6 +400,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:checked="true"
                     android:text="Mesaja tıklayınca buton beklemeden anında çevir"
                     android:textColor="#1A1A1A"
                     android:textSize="12.5sp" />
@@ -517,10 +451,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="1. Yukarıdan Erişilebilirlik iznini açıp API anahtarınızı kaydedin ve WhatsApp'a geçin.\n2. Yabancı müşterinin mesajına dokunun; beliren Çevir ve Yanıtla butonuna basın.\n3. Üst pencereden çeviriyi okuyup cevabı inceleyin; düzenleme gerekiyorsa yazıp Uygula'ya basın, onayladığınızda aşağı okla WhatsApp kutusuna aktarın."
+                    android:lineSpacingExtra="4dp"
+                    android:text="1. Yukarıdan Erişilebilirlik iznini açıp API anahtarınızı kaydedin ve WP Aç ile WhatsApp'a geçin.\n2. Yabancı müşterinin mesajına dokunun; anında çeviri ve yanıt önerisi üst pencerede açılır.\n3. Üst pencereden çeviriyi okuyup cevabı inceleyin; düzenleme gerekiyorsa yazıp Uygula'ya basın, onayladığınızda aşağı okla WhatsApp kutusuna aktarın."
                     android:textColor="#CC1A1A1A"
-                    android:textSize="12sp"
-                    android:lineSpacingExtra="4dp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <TextView
@@ -529,7 +463,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="14dp"
                 android:gravity="center"
-                android:text="Sürüm 1.6"
+                android:text="W. Çeviri Asistan • Sürüm 2.4"
                 android:textColor="#801A1A1A"
                 android:textSize="11.5sp" />
 

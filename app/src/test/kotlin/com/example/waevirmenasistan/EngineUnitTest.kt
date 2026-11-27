@@ -51,6 +51,13 @@ class EngineUnitTest {
         val withKey = AppSettings(provider = AiProvider.GEMINI, apiKey = "AIzaSyTestKey123")
         assertTrue(withKey.hasApiKey())
         assertEquals("Google", withKey.activeBadgeLabel())
+        assertEquals("Mor Media Works", withKey.businessName)
+        assertEquals("https://www.istanbulphotoshoot.com/", withKey.websiteUrl)
+        assertTrue(withKey.instantClickTranslate)
+        assertTrue(withKey.businessContext.contains("100€"))
+        assertTrue(withKey.businessContext.contains("150€"))
+        assertTrue(withKey.businessContext.contains("200€"))
+        assertTrue(withKey.businessContext.contains("500€"))
     }
 
     @Test

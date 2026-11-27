@@ -1,8 +1,8 @@
 {
-  "versionCode": 14,
-  "versionName": "2.3",
-  "downloadUrl": "https://github.com/onurozer34/wa-cevirmen-asistan/releases/download/v2.3/WA-Cevirmen-Asistan.apk",
-  "notes": "Cloudflare OTA birincil akis ve GitHub yedek akisi aktif (v2.3)",
-  "updatedAt": "2026-11-27T07:41:11.490Z",
-  "sizeBytes": 196894
+  "versionCode": 15,
+  "versionName": "2.4",
+  "downloadUrl": "https://github.com/onurozer34/wa-cevirmen-asistan/releases/download/v2.4/WA-Cevirmen-Asistan.apk",
+  "notes": "W. Ceviri Asistan v2.4: sade baslik, tek satir Bolum 1, Mor Media Works kalici marka ve fiyat ozeti, aninda ceviri varsayilan acik, tek logo launcher",
+  "updatedAt": "2026-11-27T10:45:32.767Z",
+  "sizeBytes": 196474
 }
