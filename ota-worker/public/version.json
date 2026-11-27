@@ -1,8 +1,8 @@
 {
-  "versionCode": 20,
-  "versionName": "2.9",
+  "versionCode": 21,
+  "versionName": "2.10",
   "downloadUrl": "https://wa-cevirmen-ota.mor-media-drive-sync-bridge.workers.dev/WA-Cevirmen-Asistan.apk",
-  "notes": "WhatsApp Ceviri v2.9: istege bagli Ceviriyi Baslat / Durdur anahtari (varsayilan beklemede)",
-  "updatedAt": "2026-11-27T13:55:48.506Z",
-  "sizeBytes": 197658
+  "notes": "WhatsApp Ceviri v2.10: surukleme/boyutlandirma sirasinda alt navigasyon tuslarinin kilitlenmesi (FLAG_LAYOUT_NO_LIMITS / FLAG_NOT_TOUCH_MODAL) kokten cozuldu",
+  "updatedAt": "2026-11-27T14:56:22.455Z",
+  "sizeBytes": 197746
 }

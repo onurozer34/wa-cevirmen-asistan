@@ -60,7 +60,11 @@ class OverlayController(
         get() = context.resources.displayMetrics.heightPixels
 
     private val statusBarApproxPx: Int
-        get() = (32 * context.resources.displayMetrics.density).toInt()
+        get() {
+            val resId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
+            return if (resId > 0) context.resources.getDimensionPixelSize(resId)
+            else (24 * context.resources.displayMetrics.density).toInt()
+        }
 
     fun showLauncherPill() {
         if (isTopPanelOpen) {
@@ -78,12 +82,13 @@ class OverlayController(
             boxPx,
             boxPx,
             WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.END
             x = (12 * density).toInt()
-            y = statusBarApproxPx + (64 * density).toInt()
+            y = (58 * density).toInt()
         }
 
         runCatching {
@@ -112,10 +117,10 @@ class OverlayController(
 
         val density = context.resources.displayMetrics.density
         val btnHeightPx = (34 * density).toInt()
-        val minY = statusBarApproxPx + (60 * density).toInt()
+        val minY = (56 * density).toInt()
 
         var yPos = if (targetBounds != null && targetBounds.width() > 0) {
-            (targetBounds.top - (btnHeightPx / 2)).coerceAtLeast(minY)
+            (targetBounds.top - statusBarApproxPx - (btnHeightPx / 2)).coerceAtLeast(minY)
         } else {
             minY + (18 * density).toInt()
         }
@@ -123,7 +128,7 @@ class OverlayController(
         if (isTopPanelOpen && topPanelView != null) {
             val panelLoc = IntArray(2)
             topPanelView!!.getLocationOnScreen(panelLoc)
-            val panelBottom = panelLoc[1] + topPanelView!!.height
+            val panelBottom = (panelLoc[1] - statusBarApproxPx) + topPanelView!!.height
             if (panelBottom > 0 && yPos < panelBottom + (8 * density).toInt()) {
                 yPos = panelBottom + (8 * density).toInt()
             }
@@ -139,7 +144,8 @@ class OverlayController(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
@@ -171,15 +177,14 @@ class OverlayController(
             val panelWidthPx = (screenWidth - sideMarginPx * 2).coerceAtLeast((260 * density).toInt())
 
             val defaultX = sideMarginPx
-            val defaultY = statusBarApproxPx + (52 * density).toInt()
+            val defaultY = (52 * density).toInt()
 
             val params = WindowManager.LayoutParams(
                 panelWidthPx,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT
             ).apply {
                 gravity = Gravity.TOP or Gravity.START
@@ -310,7 +315,7 @@ class OverlayController(
             }
         }
 
-        // 2D free dragging from top header (allows pushing off left, right, and bottom edges)
+        // 2D dragging inside safe usable window bounds (never overlaps system navigation bar)
         var dragStartX = 0
         var dragStartY = 0
         var touchStartRawX = 0f
@@ -319,6 +324,7 @@ class OverlayController(
             val p = topPanelParams ?: return@setOnTouchListener false
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
+                    setInputFocusable(false)
                     dragStartX = p.x
                     dragStartY = p.y
                     touchStartRawX = event.rawX
@@ -328,14 +334,17 @@ class OverlayController(
                 MotionEvent.ACTION_MOVE -> {
                     val dx = (event.rawX - touchStartRawX).toInt()
                     val dy = (event.rawY - touchStartRawY).toInt()
-                    val keepEdgePx = (52 * density).toInt()
-                    p.x = (dragStartX + dx).coerceIn(-(panelWidthPx - keepEdgePx), screenWidth - keepEdgePx)
-                    p.y = (dragStartY + dy).coerceIn(statusBarApproxPx, screenHeight - (42 * density).toInt())
+                    val maxX = (screenWidth - panelWidthPx).coerceAtLeast(0)
+                    val maxY = (screenHeight - view.height.coerceAtLeast((80 * density).toInt())).coerceAtLeast(0)
+                    p.x = (dragStartX + dx).coerceIn(0, maxX)
+                    p.y = (dragStartY + dy).coerceIn(0, maxY)
                     savedPanelX = p.x
                     savedPanelY = p.y
                     runCatching { windowManager.updateViewLayout(view, p) }
                     true
                 }
+                MotionEvent.ACTION_UP,
+                MotionEvent.ACTION_CANCEL -> true
                 else -> false
             }
         }
@@ -346,6 +355,7 @@ class OverlayController(
         resizeHandle.setOnTouchListener { _, event ->
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
+                    setInputFocusable(false)
                     resizeStartY = event.rawY
                     resizeStartHeight = cardsContainer.height.takeIf { it > 0 } ?: cardsContainer.layoutParams.height
                     true
@@ -353,13 +363,15 @@ class OverlayController(
                 MotionEvent.ACTION_MOVE -> {
                     val dy = (event.rawY - resizeStartY).toInt()
                     val minH = (84 * density).toInt()
-                    val maxH = (screenHeight * 0.58f).toInt().coerceAtLeast(minH + 40)
+                    val maxH = (screenHeight * 0.56f).toInt().coerceAtLeast(minH + 40)
                     val nextH = (resizeStartHeight + dy).coerceIn(minH, maxH)
                     cardsContainer.layoutParams = cardsContainer.layoutParams.apply { height = nextH }
                     savedCardsHeightPx = nextH
                     cardsContainer.requestLayout()
                     true
                 }
+                MotionEvent.ACTION_UP,
+                MotionEvent.ACTION_CANCEL -> true
                 else -> false
             }
         }
@@ -441,12 +453,11 @@ class OverlayController(
         val currentlyFocusable = (params.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE) == 0
         if (currentlyFocusable == focusable) return
 
+        val baseFlags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
         params.flags = if (focusable) {
-            (params.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()) or
-                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
+            baseFlags or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
         } else {
-            (params.flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE) and
-                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH.inv()
+            baseFlags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
         }
         runCatching {
             windowManager.updateViewLayout(view, params)
